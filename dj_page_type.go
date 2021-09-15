@@ -110,6 +110,8 @@ func (djPage DjPage) Fields() []string {
 		"InvNr",
 		"CurCode",
 		"HdrDesc",
+		"TrnDate",
+		"InpDate",
 	}
 }
 
