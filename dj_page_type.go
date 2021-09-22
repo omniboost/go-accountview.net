@@ -50,7 +50,7 @@ type DjPage struct {
 	ImpCode   string   `json:"IMP_CODE" field_type:"C"`   // Dagboekbericht
 	InpDate   DateTime `json:"INP_DATE" field_type:"T"`   // Invoerdatum
 	InpUsr    string   `json:"INP_USR" field_type:"C"`    // Invoermedewerker
-	InvNr     string   `json:"INV_NR" field_type:"C"`     // Document-/factuurnummer
+	InvNr     *string  `json:"INV_NR" field_type:"C"`     // Document-/factuurnummer
 	LbAmt     float64  `json:"LB_AMT" field_type:"Y"`     // Bedrag loonbelasting
 	LbCur     float64  `json:"LB_CUR" field_type:"Y"`     // Bedrag loonbelasting VV
 	MandB2b   bool     `json:"MAND_B2B" field_type:"L"`   // Incassovorm: zakelijk
@@ -81,7 +81,7 @@ type DjPage struct {
 	StmtDate  Date     `json:"STMT_DATE" field_type:"D"`  // Datum afschrift
 	StmtLine  bool     `json:"STMT_LINE" field_type:"L"`  // Bankafschriftregel
 	StmtNr    int      `json:"STMT_NR" field_type:"I"`    // Bankafschrift
-	SubNr     string   `json:"SUB_NR" field_type:"C"`     // Debiteur/Crediteur
+	SubNr     *string  `json:"SUB_NR" field_type:"C"`     // Debiteur/Crediteur
 	SysGen    bool     `json:"SYS_GEN" field_type:"L"`    // Bladzijde gegenereerd door systeem
 	SysVal    bool     `json:"SYS_VAL" field_type:"L"`    // Systeemvalidaties
 	TgtBal    float64  `json:"TGT_BAL" field_type:"Y"`    // Controlesaldo
@@ -110,8 +110,8 @@ func (djPage DjPage) Fields() []string {
 		"InvNr",
 		"CurCode",
 		"HdrDesc",
-		"TrnDate",
 		"InpDate",
+		"TrnDate",
 	}
 }
 

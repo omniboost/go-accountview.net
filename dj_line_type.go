@@ -27,7 +27,7 @@ type DjLine struct {
 	ExpID     string  `json:"EXP_ID" field_type:"C"`     // Export-ID
 	GrekType  string  `json:"GREK_TYPE" field_type:"C"`  // Transactietype G-rekening
 	HomeDif   float64 `json:"HOME_DIF" field_type:"Y"`   // Verschil in adm.valuta
-	InvNr     string  `json:"INV_NR" field_type:"C"`     // Document-/factuurnummer
+	InvNr     *string `json:"INV_NR" field_type:"C"`     // Document-/factuurnummer
 	ObliNr    string  `json:"OBLI_NR" field_type:"C"`    // Verplichtingnummer
 	PageNr    string  `json:"PAGE_NR" field_type:"C"`    // Bladzijdenummer (teken)
 	PageNrv   float64 `json:"PAGE_NRV" field_type:"N"`   // Bladzijdenummer
@@ -41,13 +41,13 @@ type DjLine struct {
 	RecOrd    int     `json:"REC_ORD" field_type:"I"`    // Regelvolgorde
 	SrcID     string  `json:"SRC_ID" field_type:"C"`     // Identificatie bron
 	SrcType   float64 `json:"SRC_TYPE" field_type:"N"`   // Brontype
-	SubNr     string  `json:"SUB_NR" field_type:"C"`     // Debiteur-/crediteurnummer
+	SubNr     *string `json:"SUB_NR" field_type:"C"`     // Debiteur-/crediteurnummer
 	TrnDate   Date    `json:"TRN_DATE" field_type:"D"`   // Mutatiedatum
 	TrnDesc   string  `json:"TRN_DESC" field_type:"C"`   // Omschrijving regel
 	TrnQty    float64 `json:"TRN_QTY" field_type:"N"`    // Aantal (agr)
 	TrnWgt    float64 `json:"TRN_WGT" field_type:"N"`    // Gewicht
 	VATAmt    float64 `json:"VAT_AMT" field_type:"Y"`    // BTW-bedrag
-	VATCode   string  `json:"VAT_CODE" field_type:"C"`   // BTW-code
+	VATCode   *string `json:"VAT_CODE" field_type:"C"`   // BTW-code
 	VexchRate float64 `json:"VEXCH_RATE" field_type:"B"` // Valutakoers (import)
 	WkrTrn    bool    `json:"WKR_TRN" field_type:"L"`    // Mutatie ten laste van vrije ruimte WKR
 
@@ -66,6 +66,7 @@ func (djLine DjLine) Table() string {
 func (djLine DjLine) Fields() []string {
 	return []string{
 		"AcctNr",
+		// "SubNr",
 		"CostCode",
 		"Amount",
 		"CurCode",
@@ -75,6 +76,7 @@ func (djLine DjLine) Fields() []string {
 		"TrnDate",
 		"TrnDesc",
 		"RecID",
+		// "InvNr",
 	}
 }
 

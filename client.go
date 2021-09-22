@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/fatih/structtag"
 	"github.com/pkg/errors"
@@ -553,13 +554,14 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields []string) (
 		switch t := value.(type) {
 		case int:
 			fieldType = "I"
-		case string:
+		case string, *string:
 			fieldType = "C"
 		case float64:
 			fieldType = "N"
-		case Date:
+		case Date, DateTime, time.Time:
 			fieldType = "T"
 		default:
+			log.Println(reflect.TypeOf(value))
 			return tdf, errors.Errorf("Don't know how to map type %s", t)
 		}
 
