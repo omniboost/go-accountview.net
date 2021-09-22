@@ -8,7 +8,7 @@ type AcctRec struct {
 	ExtKey    int `json:"EXT_KEY"`
 	ContactID int `json:"CONTACT_Id"`
 
-	fields fields
+	fields *fields
 }
 
 func (acctRec AcctRec) BusinessObject() string {
@@ -19,9 +19,9 @@ func (acctRec AcctRec) Table() string {
 	return "CONTACT"
 }
 
-func (acctRec AcctRec) Fields() fields {
-	if len(acctRec.fields) == 0 {
-		acctRec.fields = fields{}
+func (acctRec AcctRec) Fields() *fields {
+	if acctRec.fields == nil {
+		acctRec.fields = &fields{}
 		acctRec.fields.Set(
 			"SrcCode",
 			"AcctName",
@@ -41,7 +41,7 @@ func (acctRec AcctRec) Fields() fields {
 }
 
 func (acctRec AcctRec) Values() ([]interface{}, error) {
-	return FieldsToValues(acctRec, acctRec.Fields())
+	return FieldsToValues(acctRec, *acctRec.Fields())
 }
 
 func (acctRec AcctRec) ToAccountviewDataPostRequest(client *Client) (AccountviewDataPostRequest, error) {

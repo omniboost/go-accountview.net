@@ -92,20 +92,20 @@ type DjPage struct {
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`
 
-	fields fields
+	fields *fields
 }
 
-func (djPage DjPage) BusinessObject() string {
+func (djPage *DjPage) BusinessObject() string {
 	return "DJ2"
 }
 
-func (djPage DjPage) Table() string {
+func (djPage *DjPage) Table() string {
 	return "DJ_PAGE"
 }
 
-func (djPage DjPage) Fields() fields {
+func (djPage *DjPage) Fields() *fields {
 	if djPage.fields == nil {
-		djPage.fields = fields{}
+		djPage.fields = &fields{}
 		djPage.fields.Set(
 			"PageNr",
 			"DjCode",
@@ -114,19 +114,19 @@ func (djPage DjPage) Fields() fields {
 			"InvNr",
 			"CurCode",
 			"HdrDesc",
-			"InpDate",
-			"TrnDate",
+			// "InpDate",
+			// "TrnDate",
 		)
 	}
 
 	return djPage.fields
 }
 
-func (djPage DjPage) Values() ([]interface{}, error) {
-	return FieldsToValues(djPage, djPage.Fields())
+func (djPage *DjPage) Values() ([]interface{}, error) {
+	return FieldsToValues(djPage, *djPage.Fields())
 }
 
-func (djPage DjPage) ToAccountviewDataPostRequest(client *Client, lines []DjLine) (AccountviewDataPostRequest, error) {
+func (djPage *DjPage) ToAccountviewDataPostRequest(client *Client, lines []*DjLine) (AccountviewDataPostRequest, error) {
 	children := make([]BusinessObjectInterface, len(lines))
 	for i, v := range lines {
 		children[i] = BusinessObjectInterface(v)

@@ -54,20 +54,20 @@ type DjLine struct {
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`
 
-	fields fields
+	fields *fields
 }
 
-func (djLine DjLine) BusinessObject() string {
+func (djLine *DjLine) BusinessObject() string {
 	return ""
 }
 
-func (djLine DjLine) Table() string {
+func (djLine *DjLine) Table() string {
 	return "DJ_LINE"
 }
 
-func (djLine DjLine) Fields() fields {
+func (djLine *DjLine) Fields() *fields {
 	if djLine.fields == nil {
-		djLine.fields = fields{}
+		djLine.fields = &fields{}
 		djLine.fields.Set(
 			"AcctNr",
 			// "SubNr",
@@ -87,6 +87,6 @@ func (djLine DjLine) Fields() fields {
 	return djLine.fields
 }
 
-func (djLine DjLine) Values() ([]interface{}, error) {
-	return FieldsToValues(djLine, djLine.Fields())
+func (djLine *DjLine) Values() ([]interface{}, error) {
+	return FieldsToValues(djLine, *djLine.Fields())
 }

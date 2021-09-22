@@ -364,26 +364,30 @@ type Row struct {
 	Values []interface{} `json:"Values"`
 }
 
-type fields map[string]bool
+type fields []string
 
 func (ff fields) Values() []string {
-	ss := []string{}
-	for k, _ := range ff {
-		ss = append(ss, k)
+	return []string(ff)
+}
+
+func (ff *fields) Set(keys ...string) {
+	*ff = append(*ff, keys...)
+}
+
+func (ff *fields) Del(keys ...string) {
+	tmp := make([]string, len(*ff))
+	copy(tmp, *ff)
+
+	for _, key := range keys {
+		for i, v := range tmp {
+			if v == key {
+				// log.Println("Going to delete key", i, key)
+				tmp = append(tmp[:i], tmp[i+1:]...)
+				// log.Println(ff)
+				break
+			}
+		}
 	}
-	return ss
-}
 
-func (ff fields) Set(keys ...string) {
-	for _, v := range keys {
-		ff[v] = true
-	}
-}
-
-func (ff fields) Get(key string) bool {
-	return ff[key]
-}
-
-func (ff fields) Del(key string) {
-	delete(ff, key)
+	*ff = tmp
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"testing"
-	"time"
 
 	accountviewnet "github.com/omniboost/go-accountview.net"
 )
@@ -12,15 +11,15 @@ import (
 func TestDjPageTypeTest(t *testing.T) {
 	subNr := "00005"
 	invNr := "00005"
-	o := accountviewnet.DjPage{
+	o := &accountviewnet.DjPage{
 		DjCode:  "600",
 		HdrDesc: "TEST",
-		TrnDate: accountviewnet.Date{time.Date(1983, 4, 12, 0, 0, 0, 0, time.UTC)},
-		Period:  4,
-		SubNr:   &subNr,
-		InvNr:   &invNr,
+		// TrnDate: accountviewnet.Date{time.Date(1983, 4, 12, 0, 0, 0, 0, time.UTC)},
+		Period: 4,
+		SubNr:  &subNr,
+		InvNr:  &invNr,
 	}
-	lines := []accountviewnet.DjLine{
+	lines := []*accountviewnet.DjLine{
 		{
 			AcctNr: "9999",
 			Amount: 12.1,
@@ -32,7 +31,10 @@ func TestDjPageTypeTest(t *testing.T) {
 			RecID:  "REC_ID",
 		},
 	}
+
 	o.Fields().Del("TrnDate")
+	lines[0].Fields().Del("TrnDate")
+
 	req, err := o.ToAccountviewDataPostRequest(client, lines)
 	if err != nil {
 		t.Error(err)

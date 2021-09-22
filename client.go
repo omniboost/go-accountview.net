@@ -402,7 +402,7 @@ func checkContentType(response *http.Response) error {
 type BusinessObjectInterface interface {
 	BusinessObject() string
 	Table() string
-	Fields() fields
+	Fields() *fields
 	Values() ([]interface{}, error)
 }
 
@@ -430,7 +430,13 @@ func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessO
 		body.Table.DetailDefinitions = append(body.Table.DetailDefinitions, detailDefinition)
 
 		body.TableData.DetailData = make(DetailData, 1)
-		for _, c := range children {
+		for i, c := range children {
+			if i > 0 {
+				// Use fields from first child
+				keys := c.Fields().Values()
+				c.Fields().Del(keys...)
+				c.Fields().Set(children[0].Fields().Values()...)
+			}
 			rowID := strconv.Itoa(len(body.TableData.DetailData[0].Rows) + 1)
 			headerID := "1"
 			data, err := BusinessObjectToDetailData(c, rowID, headerID)
@@ -449,7 +455,7 @@ func BusinessObjectToTableDefinition(object BusinessObjectInterface) (TableDefin
 	definition := TableDefinition{}
 	definition.Name = object.Table()
 
-	dff, err := FieldsToDefinitionFields(object, object.Fields())
+	dff, err := FieldsToDefinitionFields(object, *object.Fields())
 	if err != nil {
 		return definition, err
 	}
@@ -483,7 +489,7 @@ func BusinessObjectToDetailDefinition(object BusinessObjectInterface) (TableDeta
 	definition := TableDetailDefinition{}
 	definition.Name = object.Table()
 
-	dff, err := FieldsToDefinitionFields(object, object.Fields())
+	dff, err := FieldsToDefinitionFields(object, *object.Fields())
 	if err != nil {
 		return definition, err
 	}
@@ -527,7 +533,7 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (Ta
 	tdf := make(TableDefinitionFields, len(fields))
 
 	for i, f := range fields.Values() {
-		field, ok := reflect.TypeOf(object).FieldByName(f)
+		field, ok := reflect.ValueOf(object).Elem().Type().FieldByName(f)
 		if !ok {
 			return tdf, errors.Errorf("%s is not an existing field", f)
 		}
@@ -547,7 +553,7 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (Ta
 		// 	return tdf, err
 		// }
 
-		value := reflect.ValueOf(object).FieldByName(f).Interface()
+		value := reflect.ValueOf(object).Elem().FieldByName(f).Interface()
 		fieldType := ""
 		switch t := value.(type) {
 		case int:
@@ -573,7 +579,7 @@ func FieldsToValues(object BusinessObjectInterface, fields fields) ([]interface{
 	values := make([]interface{}, len(fields))
 
 	for i, f := range fields.Values() {
-		values[i] = reflect.ValueOf(object).FieldByName(f).Interface()
+		values[i] = reflect.ValueOf(object).Elem().FieldByName(f).Interface()
 	}
 
 	return values, nil
