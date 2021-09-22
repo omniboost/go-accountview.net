@@ -7,6 +7,8 @@ type AcctRec struct {
 
 	ExtKey    int `json:"EXT_KEY"`
 	ContactID int `json:"CONTACT_Id"`
+
+	fields fields
 }
 
 func (acctRec AcctRec) BusinessObject() string {
@@ -17,20 +19,25 @@ func (acctRec AcctRec) Table() string {
 	return "CONTACT"
 }
 
-func (acctRec AcctRec) Fields() []string {
-	return []string{
-		"SrcCode",
-		"AcctName",
-		"AcctNr",
-		"Address1",
-		"CntCode",
-		"DebNr",
-		"MailBus",
-		"PostCode",
-		"City",
-		"SubNr",
-		"VATNr",
+func (acctRec AcctRec) Fields() fields {
+	if len(acctRec.fields) == 0 {
+		acctRec.fields = fields{}
+		acctRec.fields.Set(
+			"SrcCode",
+			"AcctName",
+			"AcctNr",
+			"Address1",
+			"CntCode",
+			"DebNr",
+			"MailBus",
+			"PostCode",
+			"City",
+			"SubNr",
+			"VATNr",
+		)
 	}
+
+	return acctRec.fields
 }
 
 func (acctRec AcctRec) Values() ([]interface{}, error) {

@@ -402,7 +402,7 @@ func checkContentType(response *http.Response) error {
 type BusinessObjectInterface interface {
 	BusinessObject() string
 	Table() string
-	Fields() []string
+	Fields() fields
 	Values() ([]interface{}, error)
 }
 
@@ -449,8 +449,7 @@ func BusinessObjectToTableDefinition(object BusinessObjectInterface) (TableDefin
 	definition := TableDefinition{}
 	definition.Name = object.Table()
 
-	ff := object.Fields()
-	dff, err := FieldsToDefinitionFields(object, ff)
+	dff, err := FieldsToDefinitionFields(object, object.Fields())
 	if err != nil {
 		return definition, err
 	}
@@ -484,8 +483,7 @@ func BusinessObjectToDetailDefinition(object BusinessObjectInterface) (TableDeta
 	definition := TableDetailDefinition{}
 	definition.Name = object.Table()
 
-	ff := object.Fields()
-	dff, err := FieldsToDefinitionFields(object, ff)
+	dff, err := FieldsToDefinitionFields(object, object.Fields())
 	if err != nil {
 		return definition, err
 	}
@@ -525,10 +523,10 @@ func BusinessObjectToDetailData(object BusinessObjectInterface, rowID, headerID 
 	return dd, nil
 }
 
-func FieldsToDefinitionFields(object BusinessObjectInterface, fields []string) (TableDefinitionFields, error) {
+func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (TableDefinitionFields, error) {
 	tdf := make(TableDefinitionFields, len(fields))
 
-	for i, f := range fields {
+	for i, f := range fields.Values() {
 		field, ok := reflect.TypeOf(object).FieldByName(f)
 		if !ok {
 			return tdf, errors.Errorf("%s is not an existing field", f)
@@ -571,10 +569,10 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields []string) (
 	return tdf, nil
 }
 
-func FieldsToValues(object BusinessObjectInterface, fields []string) ([]interface{}, error) {
+func FieldsToValues(object BusinessObjectInterface, fields fields) ([]interface{}, error) {
 	values := make([]interface{}, len(fields))
 
-	for i, f := range fields {
+	for i, f := range fields.Values() {
 		values[i] = reflect.ValueOf(object).FieldByName(f).Interface()
 	}
 

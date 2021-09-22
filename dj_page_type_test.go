@@ -32,6 +32,7 @@ func TestDjPageTypeTest(t *testing.T) {
 			RecID:  "REC_ID",
 		},
 	}
+	o.Fields().Del("TrnDate")
 	req, err := o.ToAccountviewDataPostRequest(client, lines)
 	if err != nil {
 		t.Error(err)

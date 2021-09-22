@@ -91,6 +91,8 @@ type DjPage struct {
 
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`
+
+	fields fields
 }
 
 func (djPage DjPage) BusinessObject() string {
@@ -101,18 +103,23 @@ func (djPage DjPage) Table() string {
 	return "DJ_PAGE"
 }
 
-func (djPage DjPage) Fields() []string {
-	return []string{
-		"PageNr",
-		"DjCode",
-		"Period",
-		"SubNr",
-		"InvNr",
-		"CurCode",
-		"HdrDesc",
-		"InpDate",
-		"TrnDate",
+func (djPage DjPage) Fields() fields {
+	if djPage.fields == nil {
+		djPage.fields = fields{}
+		djPage.fields.Set(
+			"PageNr",
+			"DjCode",
+			"Period",
+			"SubNr",
+			"InvNr",
+			"CurCode",
+			"HdrDesc",
+			"InpDate",
+			"TrnDate",
+		)
 	}
+
+	return djPage.fields
 }
 
 func (djPage DjPage) Values() ([]interface{}, error) {

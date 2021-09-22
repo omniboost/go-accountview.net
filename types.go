@@ -363,3 +363,27 @@ type Rows []Row
 type Row struct {
 	Values []interface{} `json:"Values"`
 }
+
+type fields map[string]bool
+
+func (ff fields) Values() []string {
+	ss := []string{}
+	for k, _ := range ff {
+		ss = append(ss, k)
+	}
+	return ss
+}
+
+func (ff fields) Set(keys ...string) {
+	for _, v := range keys {
+		ff[v] = true
+	}
+}
+
+func (ff fields) Get(key string) bool {
+	return ff[key]
+}
+
+func (ff fields) Del(key string) {
+	delete(ff, key)
+}
