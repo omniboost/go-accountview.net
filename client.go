@@ -560,6 +560,8 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (Ta
 			fieldType = "I"
 		case string, *string:
 			fieldType = "C"
+		case bool, *bool:
+			fieldType = "L"
 		case float64:
 			fieldType = "N"
 		case Date, DateTime, time.Time:

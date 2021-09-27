@@ -70,6 +70,8 @@ func (djLine *DjLine) Fields() *fields {
 		djLine.fields = &fields{}
 		djLine.fields.Set(
 			"AcctNr",
+			"TrnDate",
+			"TrnDesc",
 			// "SubNr",
 			"CostCode",
 			"Amount",
@@ -77,8 +79,6 @@ func (djLine *DjLine) Fields() *fields {
 			"BaseAmt",
 			"VATCode",
 			"VATAmt",
-			"TrnDate",
-			"TrnDesc",
 			"RecID",
 		// "InvNr",
 		)

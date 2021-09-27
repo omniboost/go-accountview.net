@@ -13,7 +13,7 @@ func TestDjPageGet(t *testing.T) {
 	req.QueryParams().FilterOperator1 = "Equal"
 	req.QueryParams().FilterValueType1 = "C"
 	req.QueryParams().FilterValue1 = "860"
-	req.QueryParams().FilterValue1 = "600"
+	req.QueryParams().FilterValue1 = "123"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
