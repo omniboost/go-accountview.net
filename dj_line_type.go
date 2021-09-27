@@ -72,7 +72,8 @@ func (djLine *DjLine) Fields() *fields {
 			"AcctNr",
 			"TrnDate",
 			"TrnDesc",
-			// "SubNr",
+			"InvNr",
+			"SubNr",
 			"CostCode",
 			"Amount",
 			"CurCode",
@@ -80,7 +81,6 @@ func (djLine *DjLine) Fields() *fields {
 			"VATCode",
 			"VATAmt",
 			"RecID",
-		// "InvNr",
 		)
 	}
 
