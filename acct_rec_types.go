@@ -19,7 +19,7 @@ func (acctRec AcctRec) Table() string {
 	return "CONTACT"
 }
 
-func (acctRec AcctRec) Fields() *fields {
+func (acctRec *AcctRec) Fields() *fields {
 	if acctRec.fields == nil {
 		acctRec.fields = &fields{}
 		acctRec.fields.Set(
@@ -40,11 +40,11 @@ func (acctRec AcctRec) Fields() *fields {
 	return acctRec.fields
 }
 
-func (acctRec AcctRec) Values() ([]interface{}, error) {
+func (acctRec *AcctRec) Values() ([]interface{}, error) {
 	return FieldsToValues(acctRec, *acctRec.Fields())
 }
 
-func (acctRec AcctRec) ToAccountviewDataPostRequest(client *Client) (AccountviewDataPostRequest, error) {
+func (acctRec *AcctRec) ToAccountviewDataPostRequest(client *Client) (AccountviewDataPostRequest, error) {
 	children := make([]BusinessObjectInterface, 0)
 	return BusinessObjectToAccountviewDataPostRequest(client, acctRec, children)
 }
