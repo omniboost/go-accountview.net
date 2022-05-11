@@ -411,7 +411,6 @@ func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessO
 	req := client.NewAccountviewDataPostRequest()
 	body := req.RequestBody()
 
-	body.BookDate = "2021-07-02T10:39:05.276Z"
 	body.BusinessObject = object.BusinessObject()
 	body.Table.Definition, err = BusinessObjectToTableDefinition(object)
 	if err != nil {
