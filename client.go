@@ -547,27 +547,27 @@ func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (Ta
 			return tdf, err
 		}
 
-		// fieldTypeTag, err := tags.Get("field_type")
-		// if err != nil {
-		// 	return tdf, err
-		// }
-
-		value := reflect.ValueOf(object).Elem().FieldByName(f).Interface()
 		fieldType := ""
-		switch t := value.(type) {
-		case int:
-			fieldType = "I"
-		case string, *string:
-			fieldType = "C"
-		case bool, *bool:
-			fieldType = "L"
-		case float64:
-			fieldType = "N"
-		case Date, DateTime, time.Time:
-			fieldType = "T"
-		default:
-			log.Println(reflect.TypeOf(value))
-			return tdf, errors.Errorf("Don't know how to map type %s", t)
+		fieldTypeTag, err := tags.Get("field_type")
+		if err == nil {
+			fieldType = fieldTypeTag.Value()
+		} else {
+			value := reflect.ValueOf(object).Elem().FieldByName(f).Interface()
+			switch t := value.(type) {
+			case int:
+				fieldType = "I"
+			case string, *string:
+				fieldType = "C"
+			case bool, *bool:
+				fieldType = "L"
+			case float64:
+				fieldType = "N"
+			case Date, DateTime, time.Time:
+				fieldType = "T"
+			default:
+				log.Println(reflect.TypeOf(value))
+				return tdf, errors.Errorf("Don't know how to map type %s", t)
+			}
 		}
 
 		tdf[i] = TableDefinitionField{Name: jsonTag.Name, FieldType: fieldType}

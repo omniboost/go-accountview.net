@@ -4,9 +4,9 @@ type DjLine struct {
 	AccrPy    bool    `json:"ACCR_PY" field_type:"L"`    // Posten vorig boekjaar
 	AcctNr    string  `json:"ACCT_NR" field_type:"C"`    // Rekeningnr
 	AdmCode   string  `json:"ADM_CODE" field_type:"C"`   // Admin.code
-	Amount    float64 `json:"AMOUNT" field_type:"Y"`     // Mutatiebedrag
+	Amount    float64 `json:"AMOUNT" field_type:"N"`     // Mutatiebedrag
 	BankDesc  string  `json:"BANK_DESC" field_type:"M"`  // Omschrijving bankmutatie
-	BaseAmt   float64 `json:"BASE_AMT" field_type:"Y"`   // Basisbedrag BTW
+	BaseAmt   float64 `json:"BASE_AMT" field_type:"N"`   // Basisbedrag BTW
 	BegPer    float64 `json:"BEG_PER" field_type:"N"`    // Begin periode
 	CnID      string  `json:"CN_ID" field_type:"C"`      // Unieke consolidatiecode
 	CostCode  string  `json:"COST_CODE" field_type:"C"`  // Kostenplaatscode
@@ -42,14 +42,16 @@ type DjLine struct {
 	SrcID     string  `json:"SRC_ID" field_type:"C"`     // Identificatie bron
 	SrcType   float64 `json:"SRC_TYPE" field_type:"N"`   // Brontype
 	SubNr     *string `json:"SUB_NR" field_type:"C"`     // Debiteur-/crediteurnummer
-	TrnDate   Date    `json:"TRN_DATE" field_type:"D"`   // Mutatiedatum
+	TrnDate   Date    `json:"TRN_DATE" field_type:"T"`   // Mutatiedatum
 	TrnDesc   string  `json:"TRN_DESC" field_type:"C"`   // Omschrijving regel
 	TrnQty    float64 `json:"TRN_QTY" field_type:"N"`    // Aantal (agr)
 	TrnWgt    float64 `json:"TRN_WGT" field_type:"N"`    // Gewicht
-	VATAmt    float64 `json:"VAT_AMT" field_type:"Y"`    // BTW-bedrag
+	VATAmt    float64 `json:"VAT_AMT" field_type:"N"`    // BTW-bedrag
 	VATCode   *string `json:"VAT_CODE" field_type:"C"`   // BTW-code
 	VexchRate float64 `json:"VEXCH_RATE" field_type:"B"` // Valutakoers (import)
 	WkrTrn    bool    `json:"WKR_TRN" field_type:"L"`    // Mutatie ten laste van vrije ruimte WKR
+
+	RowAction int `json:"RowAction,omitempty" field_type:"N"`
 
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`

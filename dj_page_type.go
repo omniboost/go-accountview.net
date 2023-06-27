@@ -85,7 +85,7 @@ type DjPage struct {
 	SysGen    bool     `json:"SYS_GEN" field_type:"L"`    // Bladzijde gegenereerd door systeem
 	SysVal    bool     `json:"SYS_VAL" field_type:"L"`    // Systeemvalidaties
 	TgtBal    float64  `json:"TGT_BAL" field_type:"Y"`    // Controlesaldo
-	TrnDate   Date     `json:"TRN_DATE" field_type:"D"`   // Mutatiedatum
+	TrnDate   Date     `json:"TRN_DATE" field_type:"T"`   // Mutatiedatum
 	UsrName   string   `json:"USR_NAME" field_type:"C"`   // Laatst gewijzigd door
 	VexchRate float64  `json:"VEXCH_RATE" field_type:"B"` // Valutakoers (import)
 
