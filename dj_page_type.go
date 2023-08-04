@@ -89,6 +89,8 @@ type DjPage struct {
 	UsrName   string   `json:"USR_NAME" field_type:"C"`   // Laatst gewijzigd door
 	VexchRate float64  `json:"VEXCH_RATE" field_type:"B"` // Valutakoers (import)
 
+	RowID int `json:"RowId,omitempty" field_type:"C"`
+
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`
 

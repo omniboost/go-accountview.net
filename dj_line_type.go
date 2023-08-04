@@ -52,6 +52,7 @@ type DjLine struct {
 	WkrTrn    bool    `json:"WKR_TRN" field_type:"L"`    // Mutatie ten laste van vrije ruimte WKR
 
 	RowAction int `json:"RowAction,omitempty" field_type:"N"`
+	RowID int `json:"RowId,omitempty" field_type:"C"`
 
 	ExtKey   int `json:"EXT_KEY"`
 	DjPageID int `json:"DJ_PAGE_Id"`
