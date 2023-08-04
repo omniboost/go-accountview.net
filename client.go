@@ -13,7 +13,6 @@ import (
 	"net/url"
 	"path"
 	"reflect"
-	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -436,9 +435,9 @@ func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessO
 				c.Fields().Del(keys...)
 				c.Fields().Set(children[0].Fields().Values()...)
 			}
-			rowID := strconv.Itoa(len(body.TableData.DetailData[0].Rows) + 1)
+
 			headerID := "1"
-			data, err := BusinessObjectToDetailData(c, rowID, headerID)
+			data, err := BusinessObjectToDetailData(c, headerID)
 			if err != nil {
 				return req, errors.WithStack(err)
 			}
@@ -459,12 +458,6 @@ func BusinessObjectToTableDefinition(object BusinessObjectInterface) (TableDefin
 		return definition, err
 	}
 
-	// add RowId table definition
-	dff = append(dff, TableDefinitionField{
-		Name:      "RowId",
-		FieldType: "C",
-	})
-
 	definition.Fields = dff
 	return definition, nil
 }
@@ -476,9 +469,6 @@ func BusinessObjectToTableDataData(object BusinessObjectInterface) (TableDataDat
 	if err != nil {
 		return tdd, errors.WithStack(err)
 	}
-
-	// add RowId value
-	values = append(values, []interface{}{"1"}...)
 
 	tdd.Rows = Rows{{values}}
 	return tdd, nil
@@ -493,12 +483,6 @@ func BusinessObjectToDetailDefinition(object BusinessObjectInterface) (TableDeta
 		return definition, err
 	}
 
-	// add RowId table definition
-	dff = append(dff, TableDefinitionField{
-		Name:      "RowId",
-		FieldType: "C",
-	})
-
 	// add HeaderId table definition
 	dff = append(dff, TableDefinitionField{
 		Name:      "HeaderId",
@@ -509,7 +493,7 @@ func BusinessObjectToDetailDefinition(object BusinessObjectInterface) (TableDeta
 	return definition, nil
 }
 
-func BusinessObjectToDetailData(object BusinessObjectInterface, rowID, headerID string) (DetailData, error) {
+func BusinessObjectToDetailData(object BusinessObjectInterface, headerID string) (DetailData, error) {
 	dd := DetailData{
 		DetailDataEntry{
 			Rows: Rows{},
@@ -521,8 +505,8 @@ func BusinessObjectToDetailData(object BusinessObjectInterface, rowID, headerID 
 		return dd, errors.WithStack(err)
 	}
 
-	// add RowId & HeaderId value
-	values = append(values, []interface{}{rowID, headerID}...)
+	// add HeaderId value
+	values = append(values, []interface{}{headerID}...)
 
 	dd[0].Rows = Rows{{values}}
 	return dd, nil
