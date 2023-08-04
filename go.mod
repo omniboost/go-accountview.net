@@ -1,6 +1,6 @@
 module github.com/omniboost/go-accountview.net
 
-go 1.16
+go 1.20
 
 require (
 	github.com/cydev/zero v0.0.0-20160322155811-4a4535dd56e7
