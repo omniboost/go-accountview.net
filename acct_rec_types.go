@@ -34,6 +34,7 @@ func (acctRec *AcctRec) Fields() *fields {
 			"City",
 			"SubNr",
 			"VATNr",
+			"RowID",
 		)
 	}
 
@@ -241,4 +242,5 @@ type Contact struct {
 	WwwUrl    string   `json:"WWW_URL"`    // Website
 
 	ExtKey int `json:"EXT_KEY"`
+	RowID  int `json:"RowId,omitempty" field_type:"C"`
 }
