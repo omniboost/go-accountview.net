@@ -34,6 +34,7 @@ func (r AccountviewDataGetRequest) NewQueryParams() *AccountviewDataGetRequestQu
 }
 
 type AccountviewDataGetRequestQueryParams struct {
+	BookDate       Date   `schema:"BookDate,omitempty"`
 	BusinessObject string `schema:"BusinessObject"`
 	PageSize       int    `schema:"PageSize"`
 	Fields         string `schema:"Fields,omitempty"`

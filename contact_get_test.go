@@ -8,7 +8,7 @@ import (
 
 func TestContactGet(t *testing.T) {
 	req := client.NewContactGetRequest()
-	req.QueryParams().PageSize = 20
+	req.QueryParams().PageSize = 1000
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
