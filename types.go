@@ -298,6 +298,9 @@ type Daily struct {
 	PdDesc   int      `json:"PD_DESC"`   // Betalingsreferentie
 	SendAppr bool     `json:"SEND_APPR"` // Nieuwe bladzijden verplicht in de workflow sturen
 	SysVal   bool     `json:"SYS_VAL"`   // Systeemvalidaties
+	PageNr   string   `json:"PAGE_NR"`   // Bladzijdenummer (teken)
+	PageNrv  float64  `json:"PAGE_NRV"`  // Bladzijdenummer
+	PageNrd  string   `json:"PAGE_NRD"`  // Bladzijdenummer (unieke combinatie)
 
 	ExtKey int `json:"EXT_KEY"`
 }
