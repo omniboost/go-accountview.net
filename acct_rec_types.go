@@ -1,9 +1,9 @@
 package accountviewnet
 
 type AcctRec struct {
+	Contact
 	AcctNr string `json:"ACCT_NR"` // Verzamelrekening
 	SubNr  string `json:"SUB_NR"`  // Debiteurnummer
-	Contact
 
 	ExtKey    int `json:"EXT_KEY"`
 	ContactID int `json:"CONTACT_Id"`
