@@ -58,6 +58,18 @@ type VAT struct {
 	ExtKey int `json:"EXT_KEY"`
 }
 
+type PERIOD struct {
+	StartDate DateTime `json:"START_DATE"`
+	EndDate   DateTime `json:"END_DATE"`
+	InpDate   DateTime `json:"INP_DATE"`
+	InpUsr    string   `json:"INP_USR"`
+	CngUsr    string   `json:"CNG_USR"`
+	PerNr     int      `json:"PER_NR"`
+	RecID     string   `json:"REC_ID"`
+	CngDate   DateTime `json:"CNG_DATE"`
+	CngNr     int      `json:"CNG_NR"`
+}
+
 type Ledger struct {
 	AcctAlloc string   `json:"ACCT_ALLOC"` // Saldo leegboeken naar
 	AcctBal   float64  `json:"ACCT_BAL"`   // Rekeningsaldo
