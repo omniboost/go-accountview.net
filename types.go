@@ -58,7 +58,7 @@ type VAT struct {
 	ExtKey int `json:"EXT_KEY"`
 }
 
-type PERIOD struct {
+type Period struct {
 	StartDate DateTime `json:"START_DATE"`
 	EndDate   DateTime `json:"END_DATE"`
 	InpDate   DateTime `json:"INP_DATE"`

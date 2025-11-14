@@ -19,7 +19,7 @@ func (r *PeriodListGetRequest) NewResponseBody() *PeriodListGetResponseBody {
 }
 
 type PeriodListGetResponseBody struct {
-	PERIOD []PERIOD `json:"ADM_PER"`
+	Periods []Period `json:"ADM_PER"`
 }
 
 func (r *PeriodListGetRequest) Do() (PeriodListGetResponseBody, error) {
