@@ -405,7 +405,7 @@ type BusinessObjectInterface interface {
 	Values() ([]interface{}, error)
 }
 
-func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessObjectInterface, children []BusinessObjectInterface) (AccountviewDataPostRequest, error) {
+func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessObjectInterface, childGroups [][]BusinessObjectInterface) (AccountviewDataPostRequest, error) {
 	var err error
 	req := client.NewAccountviewDataPostRequest()
 	body := req.RequestBody()
@@ -420,14 +420,18 @@ func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessO
 		return req, errors.WithStack(err)
 	}
 
-	if len(children) > 0 {
+	for _, children := range childGroups {
+		if len(children) == 0 {
+			continue
+		}
+
 		detailDefinition, err := BusinessObjectToDetailDefinition(children[0])
 		if err != nil {
 			return req, errors.WithStack(err)
 		}
 		body.Table.DetailDefinitions = append(body.Table.DetailDefinitions, detailDefinition)
 
-		body.TableData.DetailData = make(DetailData, 1)
+		detailDataEntry := DetailDataEntry{}
 		for i, c := range children {
 			if i > 0 {
 				// Use fields from first child
@@ -442,8 +446,9 @@ func BusinessObjectToAccountviewDataPostRequest(client *Client, object BusinessO
 				return req, errors.WithStack(err)
 			}
 
-			body.TableData.DetailData[0].Rows = append(body.TableData.DetailData[0].Rows, data[0].Rows...)
+			detailDataEntry.Rows = append(detailDataEntry.Rows, data[0].Rows...)
 		}
+		body.TableData.DetailData = append(body.TableData.DetailData, detailDataEntry)
 	}
 
 	return req, nil
@@ -453,11 +458,15 @@ func BusinessObjectToTableDefinition(object BusinessObjectInterface) (TableDefin
 	definition := TableDefinition{}
 	definition.Name = object.Table()
 
-	dff, err := FieldsToDefinitionFields(object, *object.Fields())
+	f := *object.Fields()
+	f.Del("RowID")
+
+	dff, err := FieldsToDefinitionFields(object, f)
 	if err != nil {
 		return definition, err
 	}
 
+	dff = append(TableDefinitionFields{{Name: "RowId", FieldType: "C"}}, dff...)
 	definition.Fields = dff
 	return definition, nil
 }
@@ -465,11 +474,15 @@ func BusinessObjectToTableDefinition(object BusinessObjectInterface) (TableDefin
 func BusinessObjectToTableDataData(object BusinessObjectInterface) (TableDataData, error) {
 	tdd := TableDataData{}
 
-	values, err := object.Values()
+	f := *object.Fields()
+	f.Del("RowID")
+
+	values, err := FieldsToValues(object, f)
 	if err != nil {
 		return tdd, errors.WithStack(err)
 	}
 
+	values = append([]interface{}{objectRowID(object)}, values...)
 	tdd.Rows = Rows{{values}}
 	return tdd, nil
 }
@@ -478,16 +491,18 @@ func BusinessObjectToDetailDefinition(object BusinessObjectInterface) (TableDeta
 	definition := TableDetailDefinition{}
 	definition.Name = object.Table()
 
-	dff, err := FieldsToDefinitionFields(object, *object.Fields())
+	f := *object.Fields()
+	f.Del("RowID")
+
+	dff, err := FieldsToDefinitionFields(object, f)
 	if err != nil {
 		return definition, err
 	}
 
-	// add HeaderId table definition
-	dff = append(dff, TableDefinitionField{
-		Name:      "HeaderId",
-		FieldType: "C",
-	})
+	dff = append(TableDefinitionFields{
+		{Name: "RowId", FieldType: "C"},
+		{Name: "HeaderId", FieldType: "C"},
+	}, dff...)
 
 	definition.Fields = dff
 	return definition, nil
@@ -500,16 +515,26 @@ func BusinessObjectToDetailData(object BusinessObjectInterface, headerID string)
 		},
 	}
 
-	values, err := object.Values()
+	f := *object.Fields()
+	f.Del("RowID")
+
+	values, err := FieldsToValues(object, f)
 	if err != nil {
 		return dd, errors.WithStack(err)
 	}
 
-	// add HeaderId value
-	values = append(values, []interface{}{headerID}...)
-
+	values = append([]interface{}{objectRowID(object), headerID}, values...)
 	dd[0].Rows = Rows{{values}}
 	return dd, nil
+}
+
+func objectRowID(object BusinessObjectInterface) interface{} {
+	v := reflect.ValueOf(object).Elem()
+	field := v.FieldByName("RowID")
+	if field.IsValid() {
+		return field.Interface()
+	}
+	return nil
 }
 
 func FieldsToDefinitionFields(object BusinessObjectInterface, fields fields) (TableDefinitionFields, error) {

@@ -35,7 +35,7 @@ func TestDjPageTypeTest(t *testing.T) {
 	o.Fields().Del("TrnDate")
 	lines[0].Fields().Del("TrnDate")
 
-	req, err := o.ToAccountviewDataPostRequest(client, lines)
+	req, err := o.ToAccountviewDataPostRequest(client, lines, nil)
 	if err != nil {
 		t.Error(err)
 		return

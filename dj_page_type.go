@@ -128,10 +128,24 @@ func (djPage *DjPage) Values() ([]interface{}, error) {
 	return FieldsToValues(djPage, *djPage.Fields())
 }
 
-func (djPage *DjPage) ToAccountviewDataPostRequest(client *Client, lines []*DjLine) (AccountviewDataPostRequest, error) {
-	children := make([]BusinessObjectInterface, len(lines))
+func (djPage *DjPage) ToAccountviewDataPostRequest(client *Client, lines []*DjLine, links []*UsrLink) (AccountviewDataPostRequest, error) {
+	lineChildren := make([]BusinessObjectInterface, len(lines))
 	for i, v := range lines {
-		children[i] = BusinessObjectInterface(v)
+		lineChildren[i] = v
 	}
-	return BusinessObjectToAccountviewDataPostRequest(client, djPage, children)
+
+	linkChildren := make([]BusinessObjectInterface, len(links))
+	for i, v := range links {
+		linkChildren[i] = v
+	}
+
+	childGroups := [][]BusinessObjectInterface{}
+	if len(lineChildren) > 0 {
+		childGroups = append(childGroups, lineChildren)
+	}
+	if len(linkChildren) > 0 {
+		childGroups = append(childGroups, linkChildren)
+	}
+
+	return BusinessObjectToAccountviewDataPostRequest(client, djPage, childGroups)
 }
