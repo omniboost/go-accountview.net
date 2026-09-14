@@ -4,6 +4,7 @@ type UsrLink struct {
 	LinkFile  string `json:"LINK_FILE" field_type:"C"`
 	FileData  string `json:"FILE_DATA" field_type:"C"`
 	DocDesc   string `json:"DOC_DESC" field_type:"C"`
+	IsExtern  bool   `json:"IS_EXTERN" field_type:"L"`
 	RowAction int    `json:"RowAction,omitempty" field_type:"N"`
 	RowID     int    `json:"RowId,omitempty" field_type:"C"`
 
@@ -26,6 +27,7 @@ func (usrLink *UsrLink) Fields() *fields {
 			"LinkFile",
 			"FileData",
 			"DocDesc",
+			"IsExtern",
 		)
 	}
 
